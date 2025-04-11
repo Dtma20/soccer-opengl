@@ -1,12 +1,14 @@
 #include <math.h>
+#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <GL/glut.h>
+#include <unistd.h>
 #include "draw.h"
 
 #define NUM_KEYS 256
-#define MOVE_SPEED 0.10f
+#define MOVE_SPEED 0.20f
 
 Ball ball = {{52.5f, 34.0f}, {0.0f, 0.0f}, 0.5f};
 Player team1[11];
@@ -175,10 +177,15 @@ void checkPlayersCollision() {
     
 }
 
+int playerSwitchCooldownTeam1 = 0;
+int playerSwitchCooldownTeam2 = 0;
 
 void switchPlayerTeam1() {
     int flag = keys['e'] ? 1 : 0;
     if(!flag) return;
+
+    if (playerSwitchCooldownTeam1 > 0)
+    return;
 
     float minDistance = -1;
     int nearestPlayer = -1;
@@ -197,11 +204,15 @@ void switchPlayerTeam1() {
         currentPlayerTeam1 = nearestPlayer;
         team1[currentPlayerTeam1].controlled = true;
     }
+    playerSwitchCooldownTeam1 = 200;
 }
 
 void switchPlayerTeam2() {
     int flag = keys['o'] ? 1 : 0;
     if(!flag) return;
+
+    if (playerSwitchCooldownTeam2 > 0)
+    return;
 
     float minDistance = -1;
     int nearestPlayer = -1;
@@ -220,6 +231,7 @@ void switchPlayerTeam2() {
         currentPlayerTeam2 = nearestPlayer;
         team2[currentPlayerTeam2].controlled = true;
     }
+    playerSwitchCooldownTeam2 = 200;
 }
 
 void display() {
@@ -233,16 +245,22 @@ void display() {
 
 
 void update() {
+    
+    int currentTime = glutGet(GLUT_ELAPSED_TIME);
+    float dt = (currentTime - lastTime) / 1000.0f;
+    lastTime = currentTime;
+
+    if (playerSwitchCooldownTeam1 > 0)
+        playerSwitchCooldownTeam1 -= dt * 1000;
+    if (playerSwitchCooldownTeam2 > 0)
+        playerSwitchCooldownTeam2 -= dt * 1000;
+    
     switchPlayerTeam1();
     switchPlayerTeam2();
     proccesMovement(&team1[currentPlayerTeam1], 1);
     proccesMovement(&team2[currentPlayerTeam2], 2);
-    
-    checkPlayersCollision();
 
-    int currentTime = glutGet(GLUT_ELAPSED_TIME);
-    float dt = (currentTime - lastTime) / 1000.0f;
-    lastTime = currentTime;
+    checkPlayersCollision();
 
     ball.pos.x += ball.speed.x * dt * 60;
     ball.pos.y += ball.speed.y * dt * 60;
@@ -273,14 +291,14 @@ void update() {
   
     team1[currentPlayerTeam1].pos.x += team1[currentPlayerTeam1].speed.x * dt * 60;
     team1[currentPlayerTeam1].pos.y += team1[currentPlayerTeam1].speed.y * dt * 60;
-    team1[currentPlayerTeam1].speed.x *= 0.95f;
-    team1[currentPlayerTeam1].speed.y *= 0.95f;
+    team1[currentPlayerTeam1].speed.x *= 0.9f;
+    team1[currentPlayerTeam1].speed.y *= 0.9f;
 
    
     team2[currentPlayerTeam2].pos.x += team2[currentPlayerTeam2].speed.x * dt * 60;
     team2[currentPlayerTeam2].pos.y += team2[currentPlayerTeam2].speed.y * dt * 60;
-    team2[currentPlayerTeam2].speed.x *= 0.95f;
-    team2[currentPlayerTeam2].speed.y *= 0.95f;
+    team2[currentPlayerTeam2].speed.x *= 0.9f;
+    team2[currentPlayerTeam2].speed.y *= 0.9f;
 
     glutPostRedisplay();
 }
@@ -292,12 +310,10 @@ void timerFunc(int value) {
 
 void keyboardDown(unsigned char key, int x, int y) {
     keys[key] = true;
-    printf("Tecla pressionada: %c\n", key);
 }
 
 void keyboardUp(unsigned char key, int x, int y) {
     keys[key] = false; 
-    printf("Tecla liberada: %c\n", key);
 }
 
 void proccesMovement(Player *player, int team) {
@@ -315,7 +331,6 @@ void proccesMovement(Player *player, int team) {
         if (keys['l']) player->speed.x = MOVE_SPEED;
         if (keys['j']) player->speed.x = -MOVE_SPEED;
     }  
-
 }
 
 void init() {
