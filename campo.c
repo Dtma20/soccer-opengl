@@ -6,7 +6,7 @@
 #include "draw.h"
 
 #define NUM_KEYS 256
-#define MOVE_SPEED 0.2f
+#define MOVE_SPEED 0.10f
 
 Ball ball = {{52.5f, 34.0f}, {0.0f, 0.0f}, 0.5f};
 Player team1[11];
@@ -25,7 +25,6 @@ bool touch(Vector2 pos1, Vector2 pos2, float r1, float r2) {
     float distance = sqrt(dx * dx + dy * dy);
     return (distance <= r1 + r2);
 }
-
 
 void initPlayers() {
     team1[0] = (Player){{5.0f, 34.0f}, {0.0f, 0.0f}, 1.0f, true};
@@ -124,6 +123,7 @@ void handlePlayerCollision(Player *p1, Player *p2) {
 }
 
 void checkPlayersCollision() {
+
     for (int i = 0; i < 11; i++) {
         for (int j = i + 1; j < 11; j++) {
             if (touch(team1[i].pos, team1[j].pos, team1[i].radius, team1[j].radius)) {
@@ -131,6 +131,7 @@ void checkPlayersCollision() {
             }
         }
     }
+
     for (int i = 0; i < 11; i++) {
         for (int j = i + 1; j < 11; j++) {
             if (touch(team2[i].pos, team2[j].pos, team2[i].radius, team2[j].radius)) {
@@ -138,6 +139,7 @@ void checkPlayersCollision() {
             }
         }
     }
+
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 11; j++) {
             if (touch(team1[i].pos, team2[j].pos, team1[i].radius, team2[j].radius)) {
@@ -145,6 +147,32 @@ void checkPlayersCollision() {
             }
         }
     }
+
+    float fieldWidth = 105.0f;
+    float fieldHeight = 68.0f;
+
+    if (team1[currentPlayerTeam1].pos.x - team1[currentPlayerTeam1].radius < 0)
+        team1[currentPlayerTeam1].pos.x = team1[currentPlayerTeam1].radius;
+    if (team1[currentPlayerTeam1].pos.x + team1[currentPlayerTeam1].radius > fieldWidth)
+        team1[currentPlayerTeam1].pos.x = fieldWidth - team1[currentPlayerTeam1].radius;
+
+    if (team1[currentPlayerTeam1].pos.y - team1[currentPlayerTeam1].radius < 0)
+        team1[currentPlayerTeam1].pos.y = team1[currentPlayerTeam1].radius;
+
+    if (team1[currentPlayerTeam1].pos.y + team1[currentPlayerTeam1].radius > fieldHeight)
+        team1[currentPlayerTeam1].pos.y = fieldHeight - team1[currentPlayerTeam1].radius;
+
+    if (team2[currentPlayerTeam2].pos.x - team2[currentPlayerTeam2].radius < 0)
+        team2[currentPlayerTeam2].pos.x = team2[currentPlayerTeam2].radius;
+    if (team2[currentPlayerTeam2].pos.x + team2[currentPlayerTeam2].radius > fieldWidth)
+        team2[currentPlayerTeam2].pos.x = fieldWidth - team2[currentPlayerTeam2].radius;
+
+    if (team2[currentPlayerTeam2].pos.y - team2[currentPlayerTeam2].radius < 0)
+        team2[currentPlayerTeam2].pos.y = team2[currentPlayerTeam2].radius;
+
+    if (team2[currentPlayerTeam2].pos.y + team2[currentPlayerTeam2].radius > fieldHeight)
+        team2[currentPlayerTeam2].pos.y = fieldHeight - team2[currentPlayerTeam2].radius;
+    
 }
 
 
@@ -209,6 +237,8 @@ void update() {
     switchPlayerTeam2();
     proccesMovement(&team1[currentPlayerTeam1], 1);
     proccesMovement(&team2[currentPlayerTeam2], 2);
+    
+    checkPlayersCollision();
 
     int currentTime = glutGet(GLUT_ELAPSED_TIME);
     float dt = (currentTime - lastTime) / 1000.0f;
@@ -252,7 +282,6 @@ void update() {
     team2[currentPlayerTeam2].speed.x *= 0.95f;
     team2[currentPlayerTeam2].speed.y *= 0.95f;
 
-    checkPlayersCollision();
     glutPostRedisplay();
 }
 
@@ -274,7 +303,6 @@ void keyboardUp(unsigned char key, int x, int y) {
 void proccesMovement(Player *player, int team) {
 
     if(team == 1) {
-        // Player 1
         if (keys['w']) player->speed.y = MOVE_SPEED;
         if (keys['s']) player->speed.y = -MOVE_SPEED;
         if (keys['d']) player->speed.x = MOVE_SPEED;
