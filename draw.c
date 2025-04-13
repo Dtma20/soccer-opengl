@@ -46,8 +46,8 @@ void drawGoalInsideArea(float x, float y) {
 }
 
 void drawBall(Ball ball) {
-    glColor3f(1, 1, 0);
-    drawCircle(ball.pos.x, ball.pos.y, ball.radius, 30, false);
+    glColor3f(1, 1, 1);
+    drawCircle(ball.pos.x, ball.pos.y, ball.radius, 30, true);
 }
 
 void drawPlayers(Player team1[], Player team2[]) {
@@ -107,20 +107,65 @@ void drawField() {
     drawGoalInsideArea(105 - 2.5f, 34 - (10.5f / 2.0f));
 }
 
-void drawScore(int scoreLeft, int scoreRight) {
-    char scoreText[20];
-    sprintf(scoreText, "%d - %d", scoreLeft, scoreRight);
-    void* font = GLUT_BITMAP_TIMES_ROMAN_24;
-    float textWidth = 0.0f;
-    for (char *c = scoreText; *c != '\0'; c++) {
-        textWidth += glutBitmapWidth(font, *c);
+int digits[10][7] = {
+    {1,1,1,1,1,1,0}, {0,1,1,0,0,0,0}, {1,1,0,1,1,0,1}, {1,1,1,1,0,0,1}, {0,1,1,0,0,1,1},
+    {1,0,1,1,0,1,1}, {1,0,1,1,1,1,1}, {1,1,1,0,0,0,0}, {1,1,1,1,1,1,1}, {1,1,1,1,0,1,1}
+};
+
+void drawSegmentPolygon(int seg, float x, float y, float size) {
+    float w = size;
+    float h = size * 2;
+    float t = size * 0.18f;
+
+    glBegin(GL_POLYGON);
+    switch (seg) {
+         case 0: glVertex2f(x + t/2, y + h); glVertex2f(x + w - t/2, y + h); glVertex2f(x + w - t, y + h - t); glVertex2f(x + t, y + h - t); break;
+         case 1: glVertex2f(x + w, y + h - t/2); glVertex2f(x + w, y + h/2 + t/2); glVertex2f(x + w - t, y + h/2 + t); glVertex2f(x + w - t, y + h - t); break;
+         case 2: glVertex2f(x + w, y + h/2 - t/2); glVertex2f(x + w, y + t/2); glVertex2f(x + w - t, y + t); glVertex2f(x + w - t, y + h/2 - t); break;
+         case 3: glVertex2f(x + t/2, y); glVertex2f(x + w - t/2, y); glVertex2f(x + w - t, y + t); glVertex2f(x + t, y + t); break;
+         case 4: glVertex2f(x, y + h/2 - t/2); glVertex2f(x, y + t/2); glVertex2f(x + t, y + t); glVertex2f(x + t, y + h/2 - t); break;
+         case 5: glVertex2f(x, y + h - t/2); glVertex2f(x, y + h/2 + t/2); glVertex2f(x + t, y + h/2 + t); glVertex2f(x + t, y + h - t); break;
+         case 6: glVertex2f(x + t, y + h/2 + t/2); glVertex2f(x + w - t, y + h/2 + t/2); glVertex2f(x + w - t/2, y + h/2); glVertex2f(x + w - t, y + h/2 - t/2); glVertex2f(x + t, y + h/2 - t/2); glVertex2f(x + t/2, y + h/2); break;
     }
-    textWidth /= 10.0f;
-    float posX = 52.5f - (textWidth / 2.0f);
-    float posY = 60.0f;
+    glEnd();
+}
+
+void drawDigit(int digit, float x, float y, float size) {
+    int valid_digit = digit % 10;
+    if (valid_digit < 0) valid_digit = 0;
+
+    if (valid_digit >= 0 && valid_digit <= 9) {
+        for (int i = 0; i < 7; i++) {
+            if (digits[valid_digit][i]) {
+                drawSegmentPolygon(i, x, y, size);
+            }
+        }
+    }
+}
+
+void drawScore(int left, int right) {
+    float size = 1.8f;
+    float digitWidth = size;
+    float digitHeight = size * 2;
+    float gap = size * 1.0f;
+
+    float totalWidth = digitWidth + gap + gap + digitWidth;
+    float startX = (105.0f - totalWidth) / 2.0f;
+    float startY = 68.0f - digitHeight - 2.5f;
+
+    int leftUnits = abs(left % 10);
+    int rightUnits = abs(right % 10);
+
     glColor3f(1.0f, 1.0f, 1.0f);
-    glRasterPos2f(posX, posY);
-    for (char *c = scoreText; *c != '\0'; c++) {
-        glutBitmapCharacter(font, *c);
-    }
+
+    drawDigit(leftUnits, startX, startY, size);
+
+    float colonX = startX + digitWidth + gap;
+    float colonDotSize = size * 0.2f;
+    glRectf(colonX - colonDotSize / 2, startY + digitHeight * 0.66f - colonDotSize / 2,
+            colonX + colonDotSize / 2, startY + digitHeight * 0.66f + colonDotSize / 2);
+    glRectf(colonX - colonDotSize / 2, startY + digitHeight * 0.33f - colonDotSize / 2,
+            colonX + colonDotSize / 2, startY + digitHeight * 0.33f + colonDotSize / 2);
+
+    drawDigit(rightUnits, startX + digitWidth + 2 * gap, startY, size);
 }
