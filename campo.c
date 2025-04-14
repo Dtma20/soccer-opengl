@@ -10,10 +10,10 @@
 #define NUM_KEYS 256
 #define MOVE_SPEED 1.8f
 
-Ball ball = {{525.0f, 340.0f}, {0.0f, 0.0f}, 8.0f}; 
+Ball ball = {{525.0f, 340.0f}, {0.0f, 0.0f}, 7.0f}; 
 Player team1[11];
 Player team2[11];
-int currentPlayerTeam1 = 10;
+int currentPlayerTeam1 = 9;
 int currentPlayerTeam2 = 10;
 
 int lastTime = 0;
@@ -29,19 +29,19 @@ bool touch(Vector2 pos1, Vector2 pos2, float r1, float r2) {
 }
 
 void initPlayers() {
-    team1[0] = (Player){{50.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[1] = (Player){{150.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[2] = (Player){{150.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[3] = (Player){{150.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[4] = (Player){{150.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[5] = (Player){{300.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[6] = (Player){{300.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[7] = (Player){{300.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[8] = (Player){{300.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[9] = (Player){{450.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[10] = (Player){{450.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, true};
+    team1[0] = (Player){{60.0f, 340.0f},  {0.0f, 0.0f}, 10.0f, false};
+    team1[1] = (Player){{180.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[2] = (Player){{180.0f, 220.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[3] = (Player){{180.0f, 460.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[4] = (Player){{180.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[5] = (Player){{330.0f, 180.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[6] = (Player){{330.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[7] = (Player){{330.0f, 500.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[8] = (Player){{480.0f, 180.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[9] = (Player){{480.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, true};
+    team1[10] = (Player){{480.0f, 500.0f}, {0.0f, 0.0f}, 10.0f, false};
 
-    team2[0] = (Player){{1000.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[0] = (Player){{990.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, false};
     team2[1] = (Player){{900.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
     team2[2] = (Player){{900.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
     team2[3] = (Player){{900.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
@@ -54,12 +54,15 @@ void initPlayers() {
     team2[10] = (Player){{600.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, true};
 }
 
+
 void resetGame() {
     ball.pos.x = 525.0f;
     ball.pos.y = 340.0f;
     ball.speed.x = 0.0f;
     ball.speed.y = 0.0f;
     initPlayers();
+    currentPlayerTeam1 = 9;
+    currentPlayerTeam2 = 10;
 }
 
 void handleCollision(Player *player) {
