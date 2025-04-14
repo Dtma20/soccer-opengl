@@ -3,13 +3,14 @@
 
 #include <stdbool.h>
 #include "campo.h"
+#include "texture.h"
 
-void drawBall(Ball ball);
 void drawField();
+void drawPlayer(Player p, int type);
+void drawBall(Ball ball, float ballAngle);
 void drawGoalInsideArea(float x, float y);
 void drawScore(int scoreLeft, int scoreRight);
 void drawPlayers(Player team1[], Player team2[]);
 void drawCircle(float cx, float cy, float r, int segments, bool filled);
 void drawPenaltyArc(float cx, float cy, float r, int segments, bool leftSide);
-
 #endif

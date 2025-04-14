@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <GL/glut.h>
-#include "campo.h"
+#include "draw.h"
 #include "bresenham.h"
 
 #define X_OFFSET 75
@@ -13,6 +13,7 @@ void drawCircle(float cx, float cy, float r, int segments, bool filled) {
     cx += X_OFFSET;
     cy += Y_OFFSET;
     if (!filled) {
+        glColor3f(1.0f,1.0f,1.0f);
         glPointSize(4.0f);
         glBegin(GL_POINTS);
             bresenham_arc((int)cx, (int)cy, (int)r, 0, 360);
@@ -44,6 +45,7 @@ void drawPenaltyArc(float cx, float cy, float r, int segments, bool leftSide) {
     int startDeg = (int)(startRad * 180.0f / PI);
     int endDeg   = (int)(endRad   * 180.0f / PI);
     
+    glColor3f(1.0f,1.0f,1.0f);
     glPointSize(4.0f);
     glBegin(GL_POINTS);
         bresenham_arc((int)cx, (int)cy, (int)r, startDeg, endDeg);
@@ -63,21 +65,73 @@ void drawGoalInsideArea(float x, float y) {
     glEnd();
 }
 
-void drawBall(Ball ball) {
+void drawBall(Ball ball, float ballAngle) {
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ballTexture);
+    
     glColor3f(1, 1, 1);
-    drawCircle(ball.pos.x, ball.pos.y, ball.radius, 30, true);
+
+    float cx = ball.pos.x + X_OFFSET;
+    float cy = ball.pos.y + Y_OFFSET;
+    float r = ball.radius;
+    int segments = 30;
+
+    glPushMatrix();
+        glTranslatef(cx, cy, 0);
+        glRotatef(ballAngle, 0.0f, 0.0f, 1.0f);
+
+        glBegin(GL_TRIANGLE_FAN);
+            glTexCoord2f(0.5f, 0.5f);
+            glVertex2f(0.0f, 0.0f);
+            for (int i = 0; i <= segments; i++) {
+                float theta = 2.0f * PI * i / segments;
+                float x = r * cos(theta);
+                float y = r * sin(theta);
+
+                float tx = 0.5f + (cos(theta) * 0.5f);
+                float ty = 0.5f + (sin(theta) * 0.5f);
+                glTexCoord2f(tx, ty);
+                glVertex2f(x, y);
+            }
+        glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
 }
 
 void drawPlayers(Player team1[], Player team2[]) {
     for (int i = 0; i < 11; i++) {
-        glColor3f(team1[i].controlled ? 0.0f : 0.0f, team1[i].controlled ? 1.0f : 0.0f, 1.0f);
-        drawCircle(team1[i].pos.x, team1[i].pos.y, team1[i].radius, 30, true);
-    }
-    for (int i = 0; i < 11; i++) {
-        glColor3f(1.0f, team2[i].controlled ? 1.0f : 0.0f, 0.0f);
-        drawCircle(team2[i].pos.x, team2[i].pos.y, team2[i].radius, 30, true);
+        drawPlayer(team1[i], 1);
+        drawPlayer(team2[i], 2);
     }
 }
+
+void drawPlayer(Player p, int type) {
+    float size = p.radius * 2;
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, (type == 1 ? playerTexture1 : playerTexture2));
+    glColor3f(1, 1, 1);
+
+    glPushMatrix();
+    
+    glTranslatef(p.pos.x + X_OFFSET, p.pos.y + Y_OFFSET, 0);
+
+    if (type == 2) {
+        glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+    }
+    
+    glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(-size, -size);
+        glTexCoord2f(1.0f, 0.0f); glVertex2f( size, -size);
+        glTexCoord2f(1.0f, 1.0f); glVertex2f( size,  size);
+        glTexCoord2f(0.0f, 1.0f); glVertex2f(-size,  size);
+    glEnd();
+
+    glPopMatrix();
+    
+    glDisable(GL_TEXTURE_2D);
+}
+
 
 void drawCornerArcs() {
     int radius = 30;

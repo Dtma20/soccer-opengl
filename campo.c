@@ -9,12 +9,14 @@
 
 #define NUM_KEYS 256
 #define MOVE_SPEED 1.8f
+#define SPEED_THRESHOLD 0.1f
 
-Ball ball = {{525.0f, 340.0f}, {0.0f, 0.0f}, 7.0f}; 
 Player team1[11];
 Player team2[11];
+float ballAngle = 0.0f;
 int currentPlayerTeam1 = 9;
 int currentPlayerTeam2 = 10;
+Ball ball = {{525.0f, 340.0f}, {0.0f, 0.0f}, 7.0f}; 
 
 int lastTime = 0;
 int scoreLeft = 0, scoreRight = 0;
@@ -29,11 +31,11 @@ bool touch(Vector2 pos1, Vector2 pos2, float r1, float r2) {
 }
 
 void initPlayers() {
-    team1[0] = (Player){{60.0f, 340.0f},  {0.0f, 0.0f}, 10.0f, false};
-    team1[1] = (Player){{180.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[2] = (Player){{180.0f, 220.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[3] = (Player){{180.0f, 460.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team1[4] = (Player){{180.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[0] = (Player){{50.0f, 340.0f},  {0.0f, 0.0f}, 10.0f, false};
+    team1[1] = (Player){{150.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[2] = (Player){{150.0f, 220.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[3] = (Player){{150.0f, 460.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[4] = (Player){{150.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
     team1[5] = (Player){{330.0f, 180.0f}, {0.0f, 0.0f}, 10.0f, false};
     team1[6] = (Player){{330.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, false};
     team1[7] = (Player){{330.0f, 500.0f}, {0.0f, 0.0f}, 10.0f, false};
@@ -42,14 +44,14 @@ void initPlayers() {
     team1[10] = (Player){{480.0f, 500.0f}, {0.0f, 0.0f}, 10.0f, false};
 
     team2[0] = (Player){{990.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team2[1] = (Player){{900.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team2[2] = (Player){{900.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team2[3] = (Player){{900.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team2[4] = (Player){{900.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team2[5] = (Player){{750.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team2[6] = (Player){{750.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team2[7] = (Player){{750.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
-    team2[8] = (Player){{750.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[1] = (Player){{870.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[2] = (Player){{870.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[3] = (Player){{870.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[4] = (Player){{870.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[5] = (Player){{720.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[6] = (Player){{720.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[7] = (Player){{720.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[8] = (Player){{720.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
     team2[9] = (Player){{600.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
     team2[10] = (Player){{600.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, true};
 }
@@ -239,7 +241,7 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glPointSize(3.0f);
     drawField();
-    drawBall(ball);
+    drawBall(ball, ballAngle);
     drawPlayers(team1, team2);
     drawScore(scoreLeft, scoreRight);
     glutSwapBuffers();
@@ -313,6 +315,14 @@ void update() {
     team2[currentPlayerTeam2].speed.x *= 0.9f;
     team2[currentPlayerTeam2].speed.y *= 0.9f;
 
+    float ballSpeed = sqrt(ball.speed.x * ball.speed.x + ball.speed.y * ball.speed.y);
+    float rotationSpeed = 90.0f;
+    if (ballSpeed > SPEED_THRESHOLD) {
+        ballAngle += rotationSpeed * dt;
+        if (ballAngle >= 360.0f)
+            ballAngle -= 360.0f;
+    }
+
     glutPostRedisplay();
 }
 
@@ -349,6 +359,12 @@ void init() {
     glLoadIdentity();
     gluOrtho2D(0, 1200, 0, 800);
     lastTime = glutGet(GLUT_ELAPSED_TIME);
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    ballTexture = loadTexture("assets/ball.png");
+    playerTexture1 = loadTexture("assets/player1.png");
+    playerTexture2 = loadTexture("assets/player2.png");
     initPlayers();
 }
 
