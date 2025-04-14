@@ -8,9 +8,9 @@
 #include "draw.h"
 
 #define NUM_KEYS 256
-#define MOVE_SPEED 0.20f
+#define MOVE_SPEED 1.8f
 
-Ball ball = {{52.5f, 34.0f}, {0.0f, 0.0f}, 0.5f};
+Ball ball = {{525.0f, 340.0f}, {0.0f, 0.0f}, 8.0f}; 
 Player team1[11];
 Player team2[11];
 int currentPlayerTeam1 = 10;
@@ -29,42 +29,42 @@ bool touch(Vector2 pos1, Vector2 pos2, float r1, float r2) {
 }
 
 void initPlayers() {
-    team1[0] = (Player){{5.0f, 34.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[1] = (Player){{15.0f, 10.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[2] = (Player){{15.0f, 25.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[3] = (Player){{15.0f, 43.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[4] = (Player){{15.0f, 58.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[5] = (Player){{30.0f, 10.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[6] = (Player){{30.0f, 25.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[7] = (Player){{30.0f, 43.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[8] = (Player){{30.0f, 58.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[9] = (Player){{45.0f, 25.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team1[10] = (Player){{45.0f, 43.0f}, {0.0f, 0.0f}, 1.0f, true};
+    team1[0] = (Player){{50.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[1] = (Player){{150.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[2] = (Player){{150.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[3] = (Player){{150.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[4] = (Player){{150.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[5] = (Player){{300.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[6] = (Player){{300.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[7] = (Player){{300.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[8] = (Player){{300.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[9] = (Player){{450.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team1[10] = (Player){{450.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, true};
 
-    team2[0] = (Player){{100.0f, 34.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[1] = (Player){{90.0f, 10.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[2] = (Player){{90.0f, 25.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[3] = (Player){{90.0f, 43.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[4] = (Player){{90.0f, 58.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[5] = (Player){{75.0f, 10.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[6] = (Player){{75.0f, 25.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[7] = (Player){{75.0f, 43.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[8] = (Player){{75.0f, 58.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[9] = (Player){{60.0f, 25.0f}, {0.0f, 0.0f}, 1.0f, false};
-    team2[10] = (Player){{60.0f, 43.0f}, {0.0f, 0.0f}, 1.0f, true};
+    team2[0] = (Player){{1000.0f, 340.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[1] = (Player){{900.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[2] = (Player){{900.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[3] = (Player){{900.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[4] = (Player){{900.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[5] = (Player){{750.0f, 100.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[6] = (Player){{750.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[7] = (Player){{750.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[8] = (Player){{750.0f, 580.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[9] = (Player){{600.0f, 250.0f}, {0.0f, 0.0f}, 10.0f, false};
+    team2[10] = (Player){{600.0f, 430.0f}, {0.0f, 0.0f}, 10.0f, true};
 }
 
 void resetGame() {
-    ball.pos.x = 52.5f;
-    ball.pos.y = 34.0f;
+    ball.pos.x = 525.0f;
+    ball.pos.y = 340.0f;
     ball.speed.x = 0.0f;
     ball.speed.y = 0.0f;
     initPlayers();
 }
 
 void handleCollision(Player *player) {
-
-    if(!touch(ball.pos, player->pos, ball.radius, player->radius)) return;
+    if (!touch(ball.pos, player->pos, ball.radius, player->radius))
+        return;
  
     float dx = ball.pos.x - player->pos.x;
     float dy = ball.pos.y - player->pos.y;
@@ -85,7 +85,7 @@ void handleCollision(Player *player) {
     ball.pos.x += nx * overlap;
     ball.pos.y += ny * overlap;
     float speed = sqrt(ball.speed.x * ball.speed.x + ball.speed.y * ball.speed.y);
-    const float maxSpeed = 0.3f;
+    const float maxSpeed = 3.0f;
     if (speed > maxSpeed) {
         ball.speed.x = ball.speed.x / speed * maxSpeed;
         ball.speed.y = ball.speed.y / speed * maxSpeed;
@@ -126,7 +126,6 @@ void handlePlayerCollision(Player *p1, Player *p2) {
 }
 
 void checkPlayersCollision() {
-
     for (int i = 0; i < 11; i++) {
         for (int j = i + 1; j < 11; j++) {
             if (touch(team1[i].pos, team1[j].pos, team1[i].radius, team1[j].radius)) {
@@ -151,8 +150,8 @@ void checkPlayersCollision() {
         }
     }
 
-    float fieldWidth = 105.0f;
-    float fieldHeight = 68.0f;
+    float fieldWidth = 1050.0f;
+    float fieldHeight = 680.0f;
 
     if (team1[currentPlayerTeam1].pos.x - team1[currentPlayerTeam1].radius < 0)
         team1[currentPlayerTeam1].pos.x = team1[currentPlayerTeam1].radius;
@@ -161,9 +160,9 @@ void checkPlayersCollision() {
 
     if (team1[currentPlayerTeam1].pos.y - team1[currentPlayerTeam1].radius < 0)
         team1[currentPlayerTeam1].pos.y = team1[currentPlayerTeam1].radius;
-
     if (team1[currentPlayerTeam1].pos.y + team1[currentPlayerTeam1].radius > fieldHeight)
         team1[currentPlayerTeam1].pos.y = fieldHeight - team1[currentPlayerTeam1].radius;
+
 
     if (team2[currentPlayerTeam2].pos.x - team2[currentPlayerTeam2].radius < 0)
         team2[currentPlayerTeam2].pos.x = team2[currentPlayerTeam2].radius;
@@ -172,10 +171,8 @@ void checkPlayersCollision() {
 
     if (team2[currentPlayerTeam2].pos.y - team2[currentPlayerTeam2].radius < 0)
         team2[currentPlayerTeam2].pos.y = team2[currentPlayerTeam2].radius;
-
     if (team2[currentPlayerTeam2].pos.y + team2[currentPlayerTeam2].radius > fieldHeight)
         team2[currentPlayerTeam2].pos.y = fieldHeight - team2[currentPlayerTeam2].radius;
-    
 }
 
 int playerSwitchCooldownTeam1 = 0;
@@ -183,10 +180,10 @@ int playerSwitchCooldownTeam2 = 0;
 
 void switchPlayerTeam1() {
     int flag = keys['e'] ? 1 : 0;
-    if(!flag) return;
+    if (!flag) return;
 
     if (playerSwitchCooldownTeam1 > 0)
-    return;
+        return;
 
     float minDistance = -1;
     int nearestPlayer = -1;
@@ -210,10 +207,10 @@ void switchPlayerTeam1() {
 
 void switchPlayerTeam2() {
     int flag = keys['o'] ? 1 : 0;
-    if(!flag) return;
+    if (!flag) return;
 
     if (playerSwitchCooldownTeam2 > 0)
-    return;
+        return;
 
     float minDistance = -1;
     int nearestPlayer = -1;
@@ -237,6 +234,7 @@ void switchPlayerTeam2() {
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
+    glPointSize(3.0f);
     drawField();
     drawBall(ball);
     drawPlayers(team1, team2);
@@ -244,9 +242,7 @@ void display() {
     glutSwapBuffers();
 }
 
-
 void update() {
-    
     int currentTime = glutGet(GLUT_ELAPSED_TIME);
     float dt = (currentTime - lastTime) / 1000.0f;
     lastTime = currentTime;
@@ -268,8 +264,17 @@ void update() {
     ball.speed.x *= 0.99f;
     ball.speed.y *= 0.99f;
 
-    float fieldWidth = 105.0f;
-    float fieldHeight = 68.0f;
+    float fieldWidth = 1050.0f;
+    float fieldHeight = 680.0f;
+
+    
+    if (ball.pos.y - ball.radius < 0 || ball.pos.y + ball.radius > fieldHeight)
+    ball.speed.y = -ball.speed.y;
+    
+    if ((ball.pos.x - ball.radius < 0 || ball.pos.x + ball.radius > fieldWidth)) {
+        if (!(ball.pos.y >= 287.5f && ball.pos.y <= 392.5f))
+        ball.speed.x = -ball.speed.x;
+    }
 
     if (ball.pos.x - ball.radius < 0)
         ball.pos.x = ball.radius;
@@ -280,18 +285,11 @@ void update() {
         ball.pos.y = ball.radius;
     if (ball.pos.y + ball.radius > fieldHeight)
         ball.pos.y = fieldHeight - ball.radius;
-
-    if (ball.pos.y - ball.radius < 0 || ball.pos.y + ball.radius > 68)
-        ball.speed.y = -ball.speed.y;
-    if ((ball.pos.x - ball.radius < 0 || ball.pos.x + ball.radius > 105)) {
-        if (!(ball.pos.y >= 28.75f && ball.pos.y <= 39.25f))
-            ball.speed.x = -ball.speed.x;
-    }
-    if (ball.pos.x - ball.radius <= 0 && ball.pos.y >= 28.75f && ball.pos.y <= 39.25f) {
+    if (ball.pos.x - ball.radius <= 0 && ball.pos.y >= 287.5f && ball.pos.y <= 392.5f) {
         scoreRight++;
         resetGame();
     }
-    if (ball.pos.x + ball.radius >= 105 && ball.pos.y >= 28.75f && ball.pos.y <= 39.25f) {
+    if (ball.pos.x + ball.radius >= fieldWidth && ball.pos.y >= 287.5f && ball.pos.y <= 392.5f) {
         scoreLeft++;
         resetGame();
     }
@@ -307,7 +305,6 @@ void update() {
     team1[currentPlayerTeam1].speed.x *= 0.9f;
     team1[currentPlayerTeam1].speed.y *= 0.9f;
 
-   
     team2[currentPlayerTeam2].pos.x += team2[currentPlayerTeam2].speed.x * dt * 60;
     team2[currentPlayerTeam2].pos.y += team2[currentPlayerTeam2].speed.y * dt * 60;
     team2[currentPlayerTeam2].speed.x *= 0.9f;
@@ -330,7 +327,6 @@ void keyboardUp(unsigned char key, int x, int y) {
 }
 
 void proccesMovement(Player *player, int team) {
-
     if(team == 1) {
         if (keys['w']) player->speed.y = MOVE_SPEED;
         if (keys['s']) player->speed.y = -MOVE_SPEED;
@@ -348,7 +344,7 @@ void init() {
     glClearColor(0.0f, 0.5f, 0.0f, 1.0f);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, 105.0, 0.0, 68.0);
+    gluOrtho2D(0, 1200, 0, 800);
     lastTime = glutGet(GLUT_ELAPSED_TIME);
     initPlayers();
 }
@@ -356,7 +352,7 @@ void init() {
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(1050, 680);
+    glutInitWindowSize(1920, 1080);
     glutCreateWindow("Campo de Futebol 2D");
     init();
     glutDisplayFunc(display);
