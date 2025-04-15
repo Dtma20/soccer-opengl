@@ -4,6 +4,9 @@
 
 O **Soccer** é um jogo de futebol em 2D desenvolvido em C utilizando a biblioteca OpenGL (GLUT) para renderização gráfica. O jogo simula uma partida de futebol com dois times de 11 jogadores cada, permitindo que os usuários controlem os jogadores, movam a bola, realizem passes e chutes ao gol. A mecânica inclui colisão entre jogadores, posse de bola, troca de jogadores controlados e pontuação, com uma física simplificada para a bola e interações no campo.
 
+![<alt-text>](<imgs/image.png>)
+
+
 Este projeto foi criado como uma demonstração de conceitos de computação gráfica, breseham e simulação de jogos.
 
 ## Autores
