@@ -3,6 +3,7 @@
 #include "stb_image.h"
 #include <GLES3/gl3.h>
 
+GLuint gkTexture;
 GLuint ballTexture;
 GLuint playerTexture1;
 GLuint playerTexture2;

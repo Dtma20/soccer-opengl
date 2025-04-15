@@ -14,7 +14,7 @@ void drawCircle(float cx, float cy, float r, int segments, bool filled) {
     cy += Y_OFFSET;
     if (!filled) {
         glColor3f(1.0f,1.0f,1.0f);
-        glPointSize(4.0f);
+        glPointSize(8.0f);
         glBegin(GL_POINTS);
             bresenham_arc((int)cx, (int)cy, (int)r, 0, 360);
         glEnd();
@@ -46,7 +46,7 @@ void drawPenaltyArc(float cx, float cy, float r, int segments, bool leftSide) {
     int endDeg   = (int)(endRad   * 180.0f / PI);
     
     glColor3f(1.0f,1.0f,1.0f);
-    glPointSize(4.0f);
+    glPointSize(8.0f);
     glBegin(GL_POINTS);
         bresenham_arc((int)cx, (int)cy, (int)r, startDeg, endDeg);
     glEnd();
@@ -56,7 +56,7 @@ void drawGoalInsideArea(float x, float y) {
     x += X_OFFSET;
     y += Y_OFFSET;
     float goalWidth = 40.0f, goalHeight = 105.0f;
-    glPointSize(4.0f);
+    glPointSize(8.0f);
     glBegin(GL_POINTS);
         bresenham_line((int)x, (int)y, (int)(x + goalWidth), (int)y);
         bresenham_line((int)(x + goalWidth), (int)y, (int)(x + goalWidth), (int)(y + goalHeight));
@@ -101,41 +101,66 @@ void drawBall(Ball ball, float ballAngle) {
 
 void drawPlayers(Player team1[], Player team2[]) {
     for (int i = 0; i < 11; i++) {
-        drawPlayer(team1[i], 1);
-        drawPlayer(team2[i], 2);
+        if(i == 0) {
+            drawPlayer(team1[i], 1, gkTexture);
+            drawPlayer(team2[i], 2, gkTexture);
+        } else {
+            drawPlayer(team1[i], 1, playerTexture1);
+            drawPlayer(team2[i], 2, playerTexture2);
+        }
     }
 }
 
-void drawPlayer(Player p, int type) {
-    float size = p.radius * 2;
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, (type == 1 ? playerTexture1 : playerTexture2));
-    glColor3f(1, 1, 1);
+void drawPlayer(Player p, int type, GLuint Texture) {
+    float playerDrawRadius = p.radius;
 
     glPushMatrix();
-    
     glTranslatef(p.pos.x + X_OFFSET, p.pos.y + Y_OFFSET, 0);
 
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, Texture);
+    glColor3f(1.0f, 1.0f, 1.0f);
+
     if (type == 2) {
+        glPushMatrix();
         glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
     }
-    
+
     glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex2f(-size, -size);
-        glTexCoord2f(1.0f, 0.0f); glVertex2f( size, -size);
-        glTexCoord2f(1.0f, 1.0f); glVertex2f( size,  size);
-        glTexCoord2f(0.0f, 1.0f); glVertex2f(-size,  size);
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(-playerDrawRadius, -playerDrawRadius);
+        glTexCoord2f(1.0f, 0.0f); glVertex2f( playerDrawRadius, -playerDrawRadius);
+        glTexCoord2f(1.0f, 1.0f); glVertex2f( playerDrawRadius,  playerDrawRadius);
+        glTexCoord2f(0.0f, 1.0f); glVertex2f(-playerDrawRadius,  playerDrawRadius);
     glEnd();
 
+    if (type == 2) {
+        glPopMatrix();
+    }
+    glDisable(GL_TEXTURE_2D); 
+    if (p.controlled) {
+        float indicatorHeight = p.radius * 0.4f;
+        float indicatorBase = p.radius * 1.0f;
+        float indicatorYOffset = p.radius + 4.0f;
+
+        if (type == 1) {
+            glColor3f(0.0f, 0.0f, 1.0f);
+        } else {
+            glColor3f(1.0f, 0.0f, 0.0f);
+        }
+
+        glBegin(GL_TRIANGLES);
+            glVertex2f(0.0f, indicatorYOffset);
+            glVertex2f(-indicatorBase / 4.0f, indicatorYOffset + indicatorHeight);
+            glVertex2f( indicatorBase / 4.0f, indicatorYOffset + indicatorHeight);
+        glEnd();
+    }
     glPopMatrix();
-    
-    glDisable(GL_TEXTURE_2D);
 }
 
 
 void drawCornerArcs() {
     int radius = 30;
-    glPointSize(4.0f);
+    glPointSize(8.0f);
     glColor3f(1, 1, 1);
     glBegin(GL_POINTS);
         bresenham_arc(0 + X_OFFSET, 0 + Y_OFFSET, radius, 0, 90);
@@ -180,7 +205,7 @@ void drawField() {
     drawCheckeredBackground();
 
     glColor3f(1, 1, 1);
-    glPointSize(4.0f);
+    glPointSize(8.0f);
     glBegin(GL_POINTS);
         bresenham_line(0 + X_OFFSET, 0 + Y_OFFSET, 1050 + X_OFFSET, 0 + Y_OFFSET);
         bresenham_line(1050 + X_OFFSET, 0 + Y_OFFSET, 1050 + X_OFFSET, 680 + Y_OFFSET);
@@ -191,7 +216,7 @@ void drawField() {
 
     drawCircle(525.0f, 340.0f, 91.5f, 100, false);
 
-    glPointSize(4.0f);
+    glPointSize(8.0f);
     glBegin(GL_POINTS);
         bresenham_line(0 + X_OFFSET, 138 + Y_OFFSET, 165 + X_OFFSET, 138 + Y_OFFSET);
         bresenham_line(165 + X_OFFSET, 138 + Y_OFFSET, 165 + X_OFFSET, 541 + Y_OFFSET);
@@ -210,7 +235,6 @@ void drawField() {
     drawCircle(110.0f, 340.0f, 5.0f, 20, true);
     drawCircle(940.0f, 340.0f, 5.0f, 20, true);
     drawCircle(525.0f, 340.0f, 5.0f, 20, true);
-    
 
     drawGoalInsideArea(0, 287.5f);
     drawGoalInsideArea(1010, 287.5f);

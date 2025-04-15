@@ -3,6 +3,7 @@
 
 #include <GL/glut.h>
 
+extern GLuint gkTexture;
 extern GLuint ballTexture;
 extern GLuint playerTexture1;
 extern GLuint playerTexture2;
