@@ -13,19 +13,20 @@
 #define GOAL_BOTTOM_Y 287.5f
 #define GOAL_TOP_Y 392.5f
 #define MOVE_SPEED 110.0f
-#define SHOOT_FORCE 300.0f
+#define SHOOT_FORCE 400.0f
 #define SPEED_THRESHOLD 0.1f
 #define PLAYER_SWITCH_COOLDOWN_MS 150
 #define POSSESSION_COOLDOWN_MS 1000
 #define STEAL_THRESHOLD 40.0f
 #define BALL_POSSESSION_OFFSET 2.0f
 #define FRICTION_BALL 0.98f
-#define PASS_FORCE 180.0f
-
+#define PASS_FORCE 300.0f
 
 Player team1[11];
 Player team2[11];
 float ballAngle = 0.0f;
+bool shootKeyPressed = false;
+int shootKeyStartTime = 0; 
 int possessionCooldown = 0;
 int currentPlayerTeam1 = 9;
 int currentPlayerTeam2 = 10;
@@ -87,29 +88,29 @@ void tryPass(Player *players, Player *player, int team) {
 
 
 void initPlayers() {
-    team1[0] = (Player){{25.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[1] = (Player){{190.0f, 100.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[2] = (Player){{190.0f, 215.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[3] = (Player){{190.0f, 460.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[4] = (Player){{190.0f, 580.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[5] = (Player){{330.0f, 180.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[6] = (Player){{330.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[7] = (Player){{330.0f, 500.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[8] = (Player){{480.0f, 180.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[9] = (Player){{480.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team1[10] = (Player){{480.0f, 500.0f}, {0.0f, 0.0f}, 15.0f, false};
+    team1[0] = (Player){{25.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[1] = (Player){{190.0f, 100.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[2] = (Player){{190.0f, 220.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[3] = (Player){{190.0f, 460.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[4] = (Player){{190.0f, 580.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[5] = (Player){{330.0f, 180.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[6] = (Player){{330.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[7] = (Player){{330.0f, 500.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[8] = (Player){{480.0f, 180.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[9] = (Player){{480.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team1[10] = (Player){{480.0f, 500.0f}, {0.0f, 0.0f}, 20.0f, false};
 
-    team2[0] = (Player){{FIELD_WIDTH - 25.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[1] = (Player){{FIELD_WIDTH - 190.0f, 100.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[2] = (Player){{FIELD_WIDTH - 190.0f, 215.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[3] = (Player){{FIELD_WIDTH - 190.0f, 460.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[4] = (Player){{FIELD_WIDTH - 190.0f, 580.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[5] = (Player){{FIELD_WIDTH - 330.0f, 180.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[6] = (Player){{FIELD_WIDTH - 330.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[7] = (Player){{FIELD_WIDTH - 330.0f, 500.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[8] = (Player){{FIELD_WIDTH - 480.0f, 180.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[9] = (Player){{FIELD_WIDTH - 480.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 15.0f, false};
-    team2[10] = (Player){{FIELD_WIDTH - 480.0f, 500.0f}, {0.0f, 0.0f}, 15.0f, false};
+    team2[0] = (Player){{FIELD_WIDTH - 25.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[1] = (Player){{FIELD_WIDTH - 190.0f, 100.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[2] = (Player){{FIELD_WIDTH - 190.0f, 220.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[3] = (Player){{FIELD_WIDTH - 190.0f, 460.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[4] = (Player){{FIELD_WIDTH - 190.0f, 580.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[5] = (Player){{FIELD_WIDTH - 330.0f, 180.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[6] = (Player){{FIELD_WIDTH - 330.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[7] = (Player){{FIELD_WIDTH - 330.0f, 500.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[8] = (Player){{FIELD_WIDTH - 480.0f, 180.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[9] = (Player){{FIELD_WIDTH - 480.0f, FIELD_HEIGHT / 2.0f}, {0.0f, 0.0f}, 20.0f, false};
+    team2[10] = (Player){{FIELD_WIDTH - 480.0f, 500.0f}, {0.0f, 0.0f}, 20.0f, false};
 
     team1[currentPlayerTeam1].controlled = true;
     for(int i=0; i<11; ++i) if(i != currentPlayerTeam1) team1[i].controlled = false;
@@ -127,6 +128,8 @@ void resetGame() {
     possessionCooldown = 0;
     currentPlayerTeam1 = 9;
     currentPlayerTeam2 = 10;
+    team1[currentPlayerTeam1].controlled = true;
+    team2[currentPlayerTeam2].controlled = true;
     initPlayers();
 }
 
@@ -475,7 +478,7 @@ void update() {
 
 void timerFunc(int value) {
     update();
-    glutTimerFunc(8, timerFunc, 0);
+    glutTimerFunc(16, timerFunc, 0);
 }
 
 void keyboardDown(unsigned char key, int x, int y) {
@@ -521,7 +524,7 @@ void init() {
     glClearColor(0.1f, 0.6f, 0.1f, 1.0f);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, 1150, 0, 800);
+    gluOrtho2D(0, 1200, 0, 800);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
