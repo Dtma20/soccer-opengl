@@ -20,7 +20,7 @@
 #define STEAL_THRESHOLD 40.0f
 #define BALL_POSSESSION_OFFSET 2.0f
 #define FRICTION_BALL 0.98f
-#define PASS_FORCE 300.0f
+#define PASS_FORCE 220.0f
 
 Player team1[11];
 Player team2[11];
@@ -64,6 +64,15 @@ void tryPass(Player *players, Player *player, int team) {
             if (dist < minDist) {
                 minDist = dist;
                 target = teammate;
+                if(team == 1) {
+                    team1[currentPlayerTeam1].controlled = false;
+                    currentPlayerTeam1 = i;
+                    team1[currentPlayerTeam1].controlled = true;
+                } else {
+                    team1[currentPlayerTeam1].controlled = false;
+                    currentPlayerTeam1 = i;
+                    team1[currentPlayerTeam1].controlled = true;
+                }
             }
         }
 
